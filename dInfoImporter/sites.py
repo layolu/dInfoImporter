@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import re
-from bs4 import BeautifulSoup as BS
+from bs4 import BeautifulSoup as BeSo
 import jaconv
 import requests
 from .model import Doujinshi
@@ -39,7 +39,7 @@ class Melonbooks(Site):
         d.source_url = url
 
         res = self.ses.get(url)
-        soup = BS(res.text, 'html.parser')
+        soup = BeSo(res.text, 'html.parser')
 
         d.name = soup.h1.text
         d.romanized_title = '' # TODO: find nice romanization lib
@@ -93,7 +93,7 @@ class Toranoana(Site):
         d.source_url = url
 
         res = self.ses.get(url)
-        soup = BS(res.text, 'html.parser')
+        soup = BeSo(res.text, 'html.parser')
 
         d.name = soup.h1.span.text
 
