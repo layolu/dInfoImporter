@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 class Doujinshi:
     source_site: str = ''
     source_url: str = ''
+    item_id: str = ''
 
     name: str = ''
     romanized_title: str = ''
@@ -25,7 +26,7 @@ class Doujinshi:
     size: str = ''  # melonbooks, toranoana
     pages: int = 0  # melonbooks, toranoana
     price: int = 0  # melonbooks, toranoana, booth
-    convention_name: str = ''  # melonbooks, toranoana
+    convention_name: str = ''  # melonbooks, toranoana, booth
 
     general_tags: list = field(default_factory=list)  # melonbooks, toranoana, booth
     series_names: list = field(default_factory=list)  # melonbooks, toranoana
