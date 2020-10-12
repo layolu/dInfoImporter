@@ -32,7 +32,7 @@ class Booth(Site):
             d.item_id = match_root_domain.group(2)
             # get artists' root page URL
             soup2artist = BeSo(self.ses.get(url).text, 'html.parser')
-            artists_root_url = soup2artist.main.header.a['href']  # https://{artist_id?}.booth.pm/
+            artists_root_url = soup2artist.find('div', class_='shop-items-owner-info').a['href']
             d.source_url = artists_root_url + 'items/' + d.item_id
         elif match_subdomain:
             d.item_id = match_subdomain.group(2)
@@ -66,8 +66,8 @@ class Booth(Site):
         d.artist_names = [div_nickname.text] if div_nickname else []
 
         div_summary = soup.find('div', class_='summary')
-        d.is_adult = div_summary.find('div', class_='badge adult') is not None
-        div_event = div_summary.find('div', class_='badge event')
+        d.is_adult = div_summary.select_one('div.badge.adult') is not None
+        div_event = div_summary.select_one('div.badge.event')
         d.convention_name = div_event.text if div_event else ''
         d.is_novel = div_summary.find('div', class_='category').text == '小説・ライトノベル'
         d.name = div_summary.h1.text
@@ -88,6 +88,10 @@ class Booth(Site):
         d.coupling_names = []
         d.character_names = []
         d.is_anthology = 'アンソロジー' in d.general_tags
+        # even if an artist tagged a book as a "コピー本" (copybook),
+        # in some cases it's actually a collection of previous copybooks,
+        # which is not actually a copybook. so it's hard to determine automatically.
+        d.is_copybook = False
 
         res_images = self.ses.get(d.source_url + '/images')
         if res_images.ok:
@@ -98,4 +102,5 @@ class Booth(Site):
                 d.sample_urls = [i['file']['url'] for i in images[1:]]
                 d.sample_images = [self.ses.get(url).content for url in d.sample_urls]
 
+        d.description = div_summary.select_one('div.description').text
         return d

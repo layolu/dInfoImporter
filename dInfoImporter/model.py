@@ -33,3 +33,5 @@ class Doujinshi:
     character_names: list = field(default_factory=list)  # toranoana
     coupling_names: list = field(default_factory=list)  # toranoana
 
+    description: str = ''
+
