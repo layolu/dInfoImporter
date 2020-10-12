@@ -57,7 +57,9 @@ class Melonbooks(Site):
         d.date_released = td_extractor('発行日').text.strip().replace('/', '-')
         d.size = td_extractor('版型・メディア').text.strip()
         d.pages = int(td_extractor('総ページ数・CG数・曲数').text.strip())
-        d.convention_name = td_extractor('イベント').text.strip()
+        td_convention = td_extractor('イベント')
+        if td_convention is not None:
+            d.convention_name = td_convention.text.strip()
         d.is_adult = td_extractor('作品種別').text.strip() == '18禁'
 
         # TODO: melonbooks also sells copybooks, but it seems hard to determine each book is it or not
