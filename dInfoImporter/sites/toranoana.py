@@ -81,4 +81,6 @@ class Toranoana(Site):
         if td_conv is not None:
             d.convention_name = td_conv.a.span.text.split()[1].strip()
 
+        d.description = soup.select_one('div.item-info').select_one('p.title').find_next_sibling('p').text.strip()
+
         return d

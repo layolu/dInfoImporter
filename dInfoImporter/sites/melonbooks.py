@@ -63,4 +63,6 @@ class Melonbooks(Site):
             d.sample_urls = ['https:' + a['href'] for a in div_thumbs.ul.find_all('a')]
             d.sample_images = [self.ses.get(url).content for url in d.sample_urls]
 
+        d.description = soup.select_one('#description').p.text.strip()
+
         return d
