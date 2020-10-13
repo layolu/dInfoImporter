@@ -1,3 +1,4 @@
+from urllib.parse import parse_qs, urlparse
 import re
 from bs4 import BeautifulSoup as BeSo
 from dInfoImporter.model import Doujinshi
@@ -17,11 +18,13 @@ class Melonbooks(Site):
         d.source_site = self.site_name
         d.source_url = url
 
+        d.item_id = parse_qs(urlparse(d.source_url).query)['product_id'][0]
+
         res = self.ses.get(url)
         soup = BeSo(res.text, 'html.parser')
 
         d.name = soup.h1.text
-        d.romanized_title = '' # TODO: find nice romanization lib
+        d.romanized_title = ''  # TODO: find nice romanization lib
 
         d.circle_name = soup.select_one('#title').find('a', class_='circle').text
         d.price = int(soup.find('td', class_='price').text.replace('¥','').replace(',',''))

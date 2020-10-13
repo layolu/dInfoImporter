@@ -18,6 +18,8 @@ class Toranoana(Site):
         d.source_site = self.site_name
         d.source_url = url
 
+        d.item_id = d.source_url.split('/')[-2]
+
         res = self.ses.get(url)
         soup = BeSo(res.text, 'html.parser')
 
